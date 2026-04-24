@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASABA - SEO Campaign</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-gold: #ffd700;
+            --bg-color: #ffffff;
+            --item-height: 70px;
+            --gap: 12px;
+            --google-blue: #4285f4;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .google-container {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 600px;
+            padding: 0 20px;
+        }
+
+        .google-logo {
+            width: 160px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            background: #fff;
+            min-height: 24px;
+        }
+
+        .search-icon {
+            color: #9aa0a6;
+            margin-right: 10px;
+        }
+
+        .typing-text {
+            font-size: 16px;
+            color: #202124;
+            border-right: 2px solid #4285f4;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+            width: 400px;
+            position: relative;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            height: var(--item-height);
+            padding: 0 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative;
+            top: 0;
+            z-index: 1;
+        }
+
+        .is-top-1 {
+            border: 2px solid #4285f4;
+            background: #e8f0fe;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.2);
+            transform: scale(1.05);
+        }
+
+        .rank {
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 35px;
+            color: #5f6368;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 15px;
+            background-color: #dadce0;
+        }
+
+        .name {
+            flex-grow: 1;
+            font-weight: 500;
+            color: #3c4043;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #34a853;
+            color: white;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .is-top-1 .status-badge {
+            opacity: 1;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 12px 35px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="google-container">
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" class="google-logo"
+            alt="Google">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <div class="typing-text" id="searchText"></div>
+        </div>
+    </div>
+    <div class="leaderboard" id="leaderboard">
+        <div class="item is-top-1" id="p1">
+            <div class="rank">1</div>
+            <div class="avatar"></div>
+            <div class="name">Đối Thủ A</div>
+            <div class="status-badge">Đang dẫn đầu</div>
+        </div>
+        <div class="item" id="p2">
+            <div class="rank">2</div>
+            <div class="avatar"></div>
+            <div class="name">Đối Thủ B</div>
+            <div class="status-badge">TOP 1</div>
+        </div>
+        <div class="item" id="p3">
+            <div class="rank">3</div>
+            <div class="avatar"></div>
+            <div class="name">Đối Thủ C</div>
+            <div class="status-badge">TOP 1</div>
+        </div>
+        <div class="item" id="p4">
+            <div class="rank">4</div>
+            <div class="avatar"></div>
+            <div class="name">Đối Thủ D</div>
+            <div class="status-badge">TOP 1</div>
+        </div>
+        <div class="item" id="tasaba">
+            <div class="rank">5</div>
+            <div class="avatar"
+                style="background-image: url('https://tasaba.vn/uploads/logo-tasaba.png'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: #fff;">
+            </div>
+            <div class="name"><b>TASABA.VN</b></div>
+            <div class="status-badge">TOP 1</div>
+        </div>
+    </div>
+    <button onclick="startSEO()">BẮT ĐẦU CHIẾN DỊCH SEO</button>
+
+    <script>
+        let isRunning = false;
+
+        function startSEO() {
+            if (isRunning) return;
+            isRunning = true;
+            const searchText = document.getElementById('searchText');
+            const text = "Bồn Khuấy Thực Phẩm Inox 2026";
+            searchText.innerHTML = "";
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    searchText.innerHTML += text.charAt(i);
+                    searchText.style.width = "auto";
+                    i++;
+                } else {
+                    clearInterval(typing);
+                    setTimeout(jumpToTop, 500);
+                }
+            }, 100);
+        }
+
+        // Hàm tạo hiệu ứng pháo hoa
+        function triggerFireworks() {
+            const duration = 3 * 1000; // Bắn trong 3 giây
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function () {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+
+                // Bắn từ 2 góc màn hình
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                }));
+            }, 250);
+        }
+
+        function jumpToTop() {
+            const tasaba = document.getElementById('tasaba');
+            const leaderboard = document.getElementById('leaderboard');
+            const items = Array.from(document.querySelectorAll('.item'));
+
+            // Tính toán khoảng cách di chuyển (tổng chiều cao các item bên trên + gap)
+            const itemHeight = tasaba.offsetHeight + 12;
+            const moveDistance = itemHeight * 4;
+
+            // Hiệu ứng đẩy lên
+            tasaba.style.transform = `translateY(-${moveDistance}px)`;
+            tasaba.classList.add('is-top-1');
+
+            // Các đối thủ khác lùi xuống
+            items.forEach(item => {
+                if (item.id !== 'tasaba') {
+                    item.style.transform = `translateY(${itemHeight}px)`;
+                    item.classList.remove('is-top-1');
+                }
+            });
+
+            setTimeout(() => {
+                // Sắp xếp lại DOM thực tế
+                tasaba.style.transition = 'none';
+                items.forEach(el => el.style.transition = 'none');
+                leaderboard.prepend(tasaba);
+
+                // Cập nhật lại số thứ tự
+                const newItems = document.querySelectorAll('.item');
+                newItems.forEach((item, index) => {
+                    item.querySelector('.rank').innerText = index + 1;
+                    item.style.transform = '';
+                    if (item.id !== 'tasaba') {
+                        item.querySelector('.status-badge').innerText = "Hạng " + (index + 1);
+                    }
+                });
+
+                setTimeout(() => {
+                    tasaba.style.transition = '';
+                    newItems.forEach(el => el.style.transition = '');
+                    isRunning = false;
+
+                    // KÍCH HOẠT PHÁO HOA KHI ĐÃ ĐỨNG VỮNG Ở TOP 1
+                    triggerFireworks();
+
+                }, 50);
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>
